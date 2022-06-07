@@ -22,7 +22,7 @@ jobs:
           cache: npm
       - run: make install
       - name: Run tests
-        run: make test
+        run: npm test
       - name: Run eslint
         run: make lint
       - name: Test & publish code coverage
