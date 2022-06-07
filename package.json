@@ -22,7 +22,8 @@
   "homepage": "https://github.com/Funkicide/frontend-project-lvl2#readme",
   "dependencies": {
     "commander": "^9.3.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "yaml": "^2.1.1"
   },
   "devDependencies": {
     "@jest/globals": "^28.1.0",
