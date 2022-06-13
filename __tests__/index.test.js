@@ -2,6 +2,7 @@ import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import genDiff from '../src/index.js';
+import formatStylish from '../src/formatters.js';
 
 test('genDiff with nested .json files', () => {
   const __filename = fileURLToPath(import.meta.url);
@@ -9,7 +10,7 @@ test('genDiff with nested .json files', () => {
   const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
   const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 
-  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'))).toMatch(readFile('expected_file.txt'));
+  expect(formatStylish(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json')))).toMatch(readFile('expected_file.txt'));
 });
 
 test('genDiff with nested .yaml files', () => {
@@ -18,5 +19,5 @@ test('genDiff with nested .yaml files', () => {
   const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
   const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 
-  expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'))).toMatch(readFile('expected_file.txt'));
+  expect(formatStylish(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json')))).toMatch(readFile('expected_file.txt'));
 });
