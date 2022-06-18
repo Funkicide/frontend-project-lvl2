@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const formatStylish = (diff) => {
+export default (diff) => {
   const iter = (currentValue, depth) => {
     const replacer = ' ';
     const spacesCount = 2;
@@ -53,5 +53,3 @@ const formatStylish = (diff) => {
 
   return iter(diff, 1);
 };
-
-export default formatStylish;
