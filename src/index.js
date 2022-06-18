@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import parseData from './parsers.js';
-import formatStylish from './formatters.js';
+import formatStylish from './formatters/stylish.js';
 
 const readFile = (filepath) => {
   const absolutePath = path.resolve(process.cwd(), filepath);
