@@ -1,49 +1,57 @@
 import _ from 'lodash';
 
-const formatStylish = (value) => {
+const formatStylish = (diff) => {
   const iter = (currentValue, depth) => {
     const replacer = ' ';
     const spacesCount = 2;
-    const nestedSpacesCount = spacesCount + 1;
 
-    const currentIndent = depth * spacesCount;
-    const bracketIndent = currentIndent - spacesCount;
-    const currentNestedIndent = depth * nestedSpacesCount;
+    const indentSize = depth * spacesCount;
+    const currentIndent = replacer.repeat(indentSize);
+    const bracketIndent = replacer.repeat(indentSize - spacesCount);
 
-    const indentSize = replacer.repeat(currentIndent);
-    const nestedIndentSize = replacer.repeat(currentNestedIndent);
+    const lines = currentValue.map((node) => {
+      const {
+        key, status, value, oldValue, newValue,
+      } = node;
 
-    const lines = currentValue
-      .map((key) => {
-        console.log(key);
-        if (key.status === 'added' && !_.isObject(key.value)) {
-          const sign = '+';
-          return `${indentSize}${sign} ${key.name}: ${key.value}`;
-        }
-        if (key.status === 'deleted' && !_.isObject(key.value)) {
-          const sign = '-';
-          return `${indentSize}${sign} ${key.name}: ${key.value}`;
-        }
-        if (key.status === 'changed') {
-          const sign1 = '-';
-          const sigh2 = '+';
+      if (status === 'added') {
+        const marker = '+ ';
 
-          const oldValue = _.isObject(key.value) ? iter(key.oldValue, depth + 1) : key.oldValue;
-          const newValue = _.isObject(key.value) ? iter(key.newValue, depth + 1) : key.newValue;
+        const val = _.isObject(value) ? iter(value, depth + 2) : value;
 
-          return `${indentSize}${sign1} ${key.name}: ${oldValue}\n${indentSize}${sigh2} ${key.name}: ${newValue}`;
-        }
-        if (key.type === 'nested') {
-          return `${nestedIndentSize}${key.name}: ${iter(key.value, depth + 1)}`;
-        }
+        return `${currentIndent}${marker}${key}: ${val}`;
+      }
+      if (status === 'deleted') {
+        const marker = '- ';
 
-        return `${nestedIndentSize}${key.name}: ${key.value}`;
-      });
+        const val = _.isObject(value) ? iter(value, depth + 2) : value;
 
-    return ['{', ...lines, `${replacer.repeat(bracketIndent)}}`].join('\n');
+        return `${currentIndent}${marker}${key}: ${val}`;
+      }
+      if (status === 'changed') {
+        const marker1 = '- ';
+        const marker2 = '+ ';
+
+        const oldVal = _.isObject(oldValue)
+          ? iter(oldValue, depth + 2)
+          : oldValue;
+        const newVal = _.isObject(newValue)
+          ? iter(newValue, depth + 2)
+          : newValue;
+
+        return `${currentIndent}${marker1}${key}: ${oldVal}\n${currentIndent}${marker2}${key}: ${newVal}`;
+      }
+
+      const marker = '  ';
+      const val = _.isObject(value) ? iter(value, depth + 2) : value;
+
+      return `${currentIndent}${marker}${key}: ${val}`;
+    });
+
+    return ['{', ...lines, `${bracketIndent}}`].join('\n');
   };
 
-  return iter(value, 1);
+  return iter(diff, 1);
 };
 
 export default formatStylish;
