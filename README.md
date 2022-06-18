@@ -7,5 +7,7 @@
 https://asciinema.org/a/025xyRo7zDOc7X4jkHAHMzg2T
 ### Gendiff shallow .yaml files demo:
 https://asciinema.org/a/v1GmUx7SbphdtxJI1GcO1u2EZ
-### Gendiff nested files demo:
+### Gendiff nested files demo (Stylish):
 https://asciinema.org/a/mKEWurhrhGnKg6kMGouRbalVz
+### Gendiff nested files demo (Plain):
+https://asciinema.org/a/jIoAS9Lr6r6zneOiY7KyaofGK
