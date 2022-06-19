@@ -11,27 +11,30 @@ export default (diff) => {
 
     const lines = currentValue.map((node) => {
       const {
-        key, status, value, oldValue, newValue,
+        key,
+        status,
+        value,
+        oldValue,
+        newValue,
       } = node;
 
-      if (status === 'added') {
-        const marker = '+ ';
+      const markers = {
+        added: '+ ',
+        deleted: '- ',
+        unchanged: '  ',
+      };
 
+      if (status === 'added') {
         const val = _.isObject(value) ? iter(value, depth + 2) : value;
 
-        return `${currentIndent}${marker}${key}: ${val}`;
+        return `${currentIndent}${markers.added}${key}: ${val}`;
       }
       if (status === 'deleted') {
-        const marker = '- ';
-
         const val = _.isObject(value) ? iter(value, depth + 2) : value;
 
-        return `${currentIndent}${marker}${key}: ${val}`;
+        return `${currentIndent}${markers.deleted}${key}: ${val}`;
       }
       if (status === 'changed') {
-        const marker1 = '- ';
-        const marker2 = '+ ';
-
         const oldVal = _.isObject(oldValue)
           ? iter(oldValue, depth + 2)
           : oldValue;
@@ -39,13 +42,12 @@ export default (diff) => {
           ? iter(newValue, depth + 2)
           : newValue;
 
-        return `${currentIndent}${marker1}${key}: ${oldVal}\n${currentIndent}${marker2}${key}: ${newVal}`;
+        return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
       }
 
-      const marker = '  ';
       const val = _.isObject(value) ? iter(value, depth + 2) : value;
 
-      return `${currentIndent}${marker}${key}: ${val}`;
+      return `${currentIndent}${markers.unchanged}${key}: ${val}`;
     });
 
     return ['{', ...lines, `${bracketIndent}}`].join('\n');
