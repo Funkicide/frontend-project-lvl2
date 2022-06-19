@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import parseData from './parsers.js';
-import formatStylish from './formatters/stylish.js';
+import format from './formatters/index.js';
 
 const readFile = (filepath) => {
   const absolutePath = path.resolve(process.cwd(), filepath);
@@ -14,7 +14,7 @@ const readFile = (filepath) => {
 };
 const getFileExt = (filepath) => path.extname(filepath);
 
-const genDiff = (filepath1, filepath2, format = formatStylish) => {
+const genDiff = (filepath1, filepath2, formatName = 'stylish') => {
   const data1 = readFile(filepath1);
   const data2 = readFile(filepath2);
 
@@ -73,7 +73,7 @@ const genDiff = (filepath1, filepath2, format = formatStylish) => {
   };
   const diff = iter(parsedData1, parsedData2);
 
-  return format(diff);
+  return format(diff, formatName);
 };
 
 export default genDiff;
