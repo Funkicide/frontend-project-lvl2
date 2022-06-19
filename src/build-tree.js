@@ -25,12 +25,12 @@ export default (filepath1, filepath2) => {
       const currentValue1 = currentData1[key];
       const currentValue2 = currentData2[key];
 
-      if (!Object.hasOwn(currentData1, key)) {
+      if (!_.has(currentData1, key)) {
         const value = _.isObject(currentValue2)
           ? iter(currentValue2, currentValue2) : currentValue2;
         return { key, status: 'added', value };
       }
-      if (!Object.hasOwn(currentData2, key)) {
+      if (!_.has(currentData2, key)) {
         const value = _.isObject(currentValue1)
           ? iter(currentValue1, currentValue1) : currentValue1;
         return { key, status: 'deleted', value };
