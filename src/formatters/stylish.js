@@ -24,28 +24,23 @@ export default (diff) => {
         unchanged: '  ',
       };
 
-      if (status === 'added') {
-        const val = _.isObject(value) ? iter(value, depth + 2) : value;
+      const val = _.isObject(value) ? iter(value, depth + 2) : value;
+      const oldVal = _.isObject(oldValue)
+        ? iter(oldValue, depth + 2)
+        : oldValue;
+      const newVal = _.isObject(newValue)
+        ? iter(newValue, depth + 2)
+        : newValue;
 
+      if (status === 'added') {
         return `${currentIndent}${markers.added}${key}: ${val}`;
       }
       if (status === 'deleted') {
-        const val = _.isObject(value) ? iter(value, depth + 2) : value;
-
         return `${currentIndent}${markers.deleted}${key}: ${val}`;
       }
       if (status === 'changed') {
-        const oldVal = _.isObject(oldValue)
-          ? iter(oldValue, depth + 2)
-          : oldValue;
-        const newVal = _.isObject(newValue)
-          ? iter(newValue, depth + 2)
-          : newValue;
-
         return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
       }
-
-      const val = _.isObject(value) ? iter(value, depth + 2) : value;
 
       return `${currentIndent}${markers.unchanged}${key}: ${val}`;
     });
