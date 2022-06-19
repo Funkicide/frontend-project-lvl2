@@ -9,7 +9,7 @@ test('stylish output .json files', () => {
   const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
   const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 
-  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'stylish')).toMatch(readFile('expected_file.txt'));
+  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'stylish')).toMatch(readFile('expected_file_stylish.txt'));
 });
 
 test('stylish output .yaml files', () => {
@@ -18,7 +18,7 @@ test('stylish output .yaml files', () => {
   const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
   const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 
-  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'stylish')).toMatch(readFile('expected_file.txt'));
+  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'stylish')).toMatch(readFile('expected_file_stylish.txt'));
 });
 
 test('plain output .json files', () => {
