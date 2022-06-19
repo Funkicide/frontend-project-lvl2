@@ -11,3 +11,5 @@ https://asciinema.org/a/v1GmUx7SbphdtxJI1GcO1u2EZ
 https://asciinema.org/a/mKEWurhrhGnKg6kMGouRbalVz
 ### Gendiff nested files demo (Plain):
 https://asciinema.org/a/jIoAS9Lr6r6zneOiY7KyaofGK
+### Gendiff nested files demo (JSON):
+https://asciinema.org/a/MGURcOolGoRbPqCUkLobtOxOo
