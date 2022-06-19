@@ -2,8 +2,6 @@
 
 import { program } from 'commander';
 import genDiff from '../src/index.js';
-import formatStylish from '../src/formatters/stylish.js';
-import formatPlain from '../src/formatters/plain.js';
 
 program
   .description('Compares two configuration files and shows a difference.')
@@ -12,11 +10,15 @@ program
   .helpOption('-h, --help', 'output usage information')
   .option('-f, --format <type>', 'output format', 'stylish')
   .action((filepath1, filepath2) => {
-    if (program.opts().format === 'stylish') {
-      console.log(genDiff(filepath1, filepath2, formatStylish));
-    }
-    if (program.opts().format === 'plain') {
-      console.log(genDiff(filepath1, filepath2, formatPlain));
+    const options = program.opts();
+    if (options.format === 'stylish') {
+      console.log(genDiff(filepath1, filepath2, 'stylish'));
+    } else if (options.format === 'plain') {
+      console.log(genDiff(filepath1, filepath2, 'plain'));
+    } else if (options.format === 'json') {
+      console.log(genDiff(filepath1, filepath2, 'json'));
+    } else {
+      console.warn('error: unknown output format');
     }
   })
   .parse();
