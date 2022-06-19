@@ -2,20 +2,20 @@ import formatStylish from './stylish.js';
 import formatPlain from './plain.js';
 
 export default (diff, formatName) => {
-  let result;
   switch (formatName) {
-    case 'stylish':
-      result = formatStylish(diff);
-      break;
-    case 'plain':
-      result = formatPlain(diff);
-      break;
-    case 'json':
-      result = JSON.stringify(diff);
-      break;
+    case 'stylish': {
+      const result = formatStylish(diff);
+      return result;
+    }
+    case 'plain': {
+      const result = formatPlain(diff);
+      return result;
+    }
+    case 'json': {
+      const result = JSON.stringify(diff);
+      return result;
+    }
     default:
-      console.warn('Unknown output format');
+      throw new Error(`Unknown output format: '${formatName}'!`);
   }
-
-  return result;
 };

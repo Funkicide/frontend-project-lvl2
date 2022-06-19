@@ -8,5 +8,5 @@ export default (data, fileExt) => {
     return YAML.parse(data);
   }
 
-  return console.log('Error: Unknown file extension');
+  throw new Error(`Unknown file extension: '${fileExt}'!`);
 };
