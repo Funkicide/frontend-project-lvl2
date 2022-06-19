@@ -41,9 +41,9 @@ export default (filepath1, filepath2) => {
         return { key, status: 'unchanged', value };
       }
       if (_.isObject(currentValue1) && _.isObject(currentValue2)) {
-        const value = iter(currentValue1, currentValue2);
+        const children = iter(currentValue1, currentValue2);
         return {
-          key, status: 'nested', value,
+          key, status: 'nested', children,
         };
       }
       if (currentValue1 !== currentValue2) {

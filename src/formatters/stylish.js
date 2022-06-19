@@ -16,6 +16,7 @@ export default (diff) => {
         value,
         oldValue,
         newValue,
+        children,
       } = node;
 
       const markers = {
@@ -40,6 +41,9 @@ export default (diff) => {
       }
       if (status === 'changed') {
         return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
+      }
+      if (status === 'nested') {
+        return `${currentIndent}${markers.unchanged}${key}: ${iter(children, depth + 2)}`;
       }
 
       return `${currentIndent}${markers.unchanged}${key}: ${val}`;

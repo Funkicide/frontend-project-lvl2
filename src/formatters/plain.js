@@ -15,7 +15,7 @@ export default (diff) => {
   const iter = (currentValue, ancestry) => {
     const lines = currentValue.flatMap((node) => {
       const {
-        key, status, value, oldValue, newValue,
+        key, status, value, oldValue, newValue, children,
       } = node;
       const currentPropertyName = [...ancestry, key].join('.');
 
@@ -35,14 +35,13 @@ export default (diff) => {
       }
 
       if (status === 'nested') {
-        return iter(value, [...ancestry, key]);
+        return iter(children, [...ancestry, key]);
       }
 
       return [];
     });
-    const result = [...lines].join('\n');
 
-    return result;
+    return [...lines].join('\n');
   };
 
   return iter(diff, []);
