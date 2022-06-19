@@ -18,8 +18,8 @@ export default (filepath1, filepath2) => {
     const keys1 = Object.keys(currentData1);
     const keys2 = Object.keys(currentData2);
 
-    const keys = _.union(keys1, keys2);
-    const sortedKeys = _.sortBy(keys);
+    const uniqueKeys = _.union(keys1, keys2);
+    const sortedKeys = _.sortBy(uniqueKeys);
 
     const nodes = sortedKeys.map((key) => {
       const currentValue1 = currentData1[key];
