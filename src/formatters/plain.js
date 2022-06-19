@@ -1,5 +1,3 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable consistent-return */
 import _ from 'lodash';
 
 const selectValueType = (value) => {
@@ -15,7 +13,7 @@ const selectValueType = (value) => {
 
 export default (diff) => {
   const iter = (currentValue, ancestry) => {
-    const lines = currentValue.map((node) => {
+    const lines = currentValue.flatMap((node) => {
       const {
         key, status, value, oldValue, newValue,
       } = node;
@@ -24,24 +22,27 @@ export default (diff) => {
       if (status === 'added') {
         const val = selectValueType(value);
 
-        return `Property '${currentPropertyName}' was added with value: ${val}\n`;
+        return `Property '${currentPropertyName}' was added with value: ${val}`;
       }
       if (status === 'deleted') {
-        return `Property '${currentPropertyName}' was removed\n`;
+        return `Property '${currentPropertyName}' was removed`;
       }
       if (status === 'changed') {
         const oldVal = selectValueType(oldValue);
         const newVal = selectValueType(newValue);
 
-        return `Property '${currentPropertyName}' was updated. From ${oldVal} to ${newVal}\n`;
+        return `Property '${currentPropertyName}' was updated. From ${oldVal} to ${newVal}`;
       }
 
       if (status === 'nested') {
         return iter(value, [...ancestry, key]);
       }
-    });
 
-    return [...lines].join('');
+      return [];
+    });
+    const result = [...lines].join('\n');
+
+    return result;
   };
 
   return iter(diff, []);
