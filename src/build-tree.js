@@ -1,17 +1,8 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
-import fs from 'fs';
-import path from 'path';
 import _ from 'lodash';
 import parseData from './parsers.js';
-
-const readFile = (filepath) => {
-  const absolutePath = path.resolve(process.cwd(), filepath);
-  const data = fs.readFileSync(absolutePath, 'utf-8');
-
-  return data;
-};
-const getFileExt = (filepath) => path.extname(filepath);
+import { readFile, getFileExt } from './utils.js';
 
 export default (filepath1, filepath2) => {
   const data1 = readFile(filepath1);
