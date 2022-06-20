@@ -19,26 +19,22 @@ export default (diff) => {
       } = node;
       const currentPropertyName = [...ancestry, key].join('.');
 
-      if (status === 'added') {
-        const val = selectValueType(value);
+      const val = selectValueType(value);
+      const oldVal = selectValueType(oldValue);
+      const newVal = selectValueType(newValue);
 
-        return `Property '${currentPropertyName}' was added with value: ${val}`;
+      switch (status) {
+        case 'added':
+          return `Property '${currentPropertyName}' was added with value: ${val}`;
+        case 'deleted':
+          return `Property '${currentPropertyName}' was removed`;
+        case 'changed':
+          return `Property '${currentPropertyName}' was updated. From ${oldVal} to ${newVal}`;
+        case 'nested':
+          return iter(children, [...ancestry, key]);
+        default:
+          return [];
       }
-      if (status === 'deleted') {
-        return `Property '${currentPropertyName}' was removed`;
-      }
-      if (status === 'changed') {
-        const oldVal = selectValueType(oldValue);
-        const newVal = selectValueType(newValue);
-
-        return `Property '${currentPropertyName}' was updated. From ${oldVal} to ${newVal}`;
-      }
-
-      if (status === 'nested') {
-        return iter(children, [...ancestry, key]);
-      }
-
-      return [];
     });
 
     return [...lines].join('\n');

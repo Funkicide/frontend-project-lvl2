@@ -33,20 +33,18 @@ export default (diff) => {
         ? iter(newValue, depth + 2)
         : newValue;
 
-      if (status === 'added') {
-        return `${currentIndent}${markers.added}${key}: ${val}`;
+      switch (status) {
+        case 'added':
+          return `${currentIndent}${markers.added}${key}: ${val}`;
+        case 'deleted':
+          return `${currentIndent}${markers.deleted}${key}: ${val}`;
+        case 'changed':
+          return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
+        case 'nested':
+          return `${currentIndent}${markers.unchanged}${key}: ${iter(children, depth + 2)}`;
+        default:
+          return `${currentIndent}${markers.unchanged}${key}: ${val}`;
       }
-      if (status === 'deleted') {
-        return `${currentIndent}${markers.deleted}${key}: ${val}`;
-      }
-      if (status === 'changed') {
-        return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
-      }
-      if (status === 'nested') {
-        return `${currentIndent}${markers.unchanged}${key}: ${iter(children, depth + 2)}`;
-      }
-
-      return `${currentIndent}${markers.unchanged}${key}: ${val}`;
     });
 
     return ['{', ...lines, `${bracketIndent}}`].join('\n');
