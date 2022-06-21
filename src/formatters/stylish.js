@@ -4,6 +4,7 @@ export default (diff) => {
   const iter = (currentValue, depth) => {
     const replacer = ' ';
     const spacesCount = 2;
+    const nestedDepth = depth + 2;
 
     const indentSize = depth * spacesCount;
     const currentIndent = replacer.repeat(indentSize);
@@ -25,12 +26,12 @@ export default (diff) => {
         unchanged: '  ',
       };
 
-      const val = _.isObject(value) ? iter(value, depth + 2) : value;
+      const val = _.isObject(value) ? iter(value, nestedDepth) : value;
       const oldVal = _.isObject(oldValue)
-        ? iter(oldValue, depth + 2)
+        ? iter(oldValue, nestedDepth)
         : oldValue;
       const newVal = _.isObject(newValue)
-        ? iter(newValue, depth + 2)
+        ? iter(newValue, nestedDepth)
         : newValue;
 
       switch (status) {
@@ -41,7 +42,7 @@ export default (diff) => {
         case 'changed':
           return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
         case 'nested':
-          return `${currentIndent}${markers.unchanged}${key}: ${iter(children, depth + 2)}`;
+          return `${currentIndent}${markers.unchanged}${key}: ${iter(children, nestedDepth)}`;
         default:
           return `${currentIndent}${markers.unchanged}${key}: ${val}`;
       }
