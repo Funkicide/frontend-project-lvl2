@@ -1,5 +1,3 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable consistent-return */
 import _ from 'lodash';
 
 const buildTree = (currentData1, currentData2) => {
@@ -13,31 +11,25 @@ const buildTree = (currentData1, currentData2) => {
     const currentValue1 = currentData1[key];
     const currentValue2 = currentData2[key];
 
-    const oldValue = _.isObject(currentValue1)
-      ? buildTree(currentValue1, currentValue1) : currentValue1;
-    const newValue = _.isObject(currentValue2)
-      ? buildTree(currentValue2, currentValue2) : currentValue2;
-
     if (!_.has(currentData1, key)) {
-      return { key, status: 'added', value: newValue };
+      return { key, status: 'added', value: currentValue2 };
     }
     if (!_.has(currentData2, key)) {
-      return { key, status: 'deleted', value: oldValue };
+      return { key, status: 'deleted', value: currentValue1 };
     }
-    if (currentValue1 === currentValue2) {
-      return { key, status: 'unchanged', value: newValue };
-    }
-    if (_.isObject(currentValue1) && _.isObject(currentValue2)) {
+    if (_.isPlainObject(currentValue1) && _.isPlainObject(currentValue2)) {
       const children = buildTree(currentValue1, currentValue2);
       return {
         key, status: 'nested', children,
       };
     }
-    if (currentValue1 !== currentValue2) {
+    if (!_.isEqual(currentValue1, currentValue2)) {
       return {
-        key, status: 'changed', oldValue, newValue,
+        key, status: 'changed', oldValue: currentValue1, newValue: currentValue2,
       };
     }
+
+    return { key, status: 'unchanged', value: currentValue2 };
   });
 
   return nodes;
