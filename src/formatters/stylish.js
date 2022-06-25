@@ -11,10 +11,11 @@ export default (diff) => {
     const bracketIndent = replacer.repeat(indentSize - spacesCount);
 
     const lines = currentValue.map((node) => {
+      const key = node.key ?? node[0];
+      const value = node.value ?? node[1];
+
       const {
-        key,
         status,
-        value,
         oldValue,
         newValue,
         children,
@@ -26,12 +27,14 @@ export default (diff) => {
         unchanged: '  ',
       };
 
-      const val = _.isObject(value) ? iter(value, nestedDepth) : value;
+      const val = _.isObject(value)
+        ? iter(Object.entries(value), nestedDepth)
+        : value;
       const oldVal = _.isObject(oldValue)
-        ? iter(oldValue, nestedDepth)
+        ? iter(Object.entries(oldValue), nestedDepth)
         : oldValue;
       const newVal = _.isObject(newValue)
-        ? iter(newValue, nestedDepth)
+        ? iter(Object.entries(newValue), nestedDepth)
         : newValue;
 
       switch (status) {
