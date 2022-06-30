@@ -51,5 +51,5 @@ test('genDiff throws on uknown file extension', () => {
   expect(() => genDiff(getFixturePath('file.ini'), getFixturePath('file.ini'))).toThrow();
 });
 test('gendiff shows help with -h option', () => {
-  expect(execSync('gendiff -h').toString()).toMatch(readFile('expected-help-text.txt'));
+  expect(execSync('node bin/gendiff.js -h').toString()).toMatch(readFile('expected-help-text.txt'));
 });
