@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "type": "module",
-  "description": "[![Actions Status](https://github.com/Funkicide/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/Funkicide/frontend-project-lvl2/actions)",
+  "description": "A .js library and a CLI tool that compares two configuration files and shows a difference. Supports .json and .yaml/.yml files.",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
