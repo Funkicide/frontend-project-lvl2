@@ -37,7 +37,7 @@ export default (diff) => {
       }
     });
 
-    return [...lines].join('\n');
+    return lines.join('\n');
   };
 
   return iter(diff, []);
