@@ -9,16 +9,7 @@ program
   .arguments('<filepath1> <filepath2>')
   .helpOption('-h, --help', 'output usage information')
   .option('-f, --format <type>', 'output format', 'stylish')
-  .action((filepath1, filepath2) => {
-    const options = program.opts();
-    if (options.format === 'stylish') {
-      console.log(genDiff(filepath1, filepath2, 'stylish'));
-    } else if (options.format === 'plain') {
-      console.log(genDiff(filepath1, filepath2, 'plain'));
-    } else if (options.format === 'json') {
-      console.log(genDiff(filepath1, filepath2, 'json'));
-    } else {
-      console.warn('error: unknown output format');
-    }
+  .action((filepath1, filepath2, formatName) => {
+    console.log(genDiff(filepath1, filepath2, formatName));
   })
   .parse();
