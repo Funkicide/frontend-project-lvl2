@@ -3,18 +3,12 @@ import formatPlain from './plain.js';
 
 export default (diff, formatName) => {
   switch (formatName) {
-    case 'stylish': {
-      const result = formatStylish(diff);
-      return result;
-    }
-    case 'plain': {
-      const result = formatPlain(diff);
-      return result;
-    }
-    case 'json': {
-      const result = JSON.stringify(diff);
-      return result;
-    }
+    case 'stylish':
+      return formatStylish(diff);
+    case 'plain':
+      return formatPlain(diff);
+    case 'json':
+      return JSON.stringify(diff);
     default:
       throw new Error(`Unknown output format: '${formatName}'!`);
   }
