@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import genDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,4 +49,7 @@ test('genDiff throws on uknown format name', () => {
 });
 test('genDiff throws on uknown file extension', () => {
   expect(() => genDiff(getFixturePath('file.ini'), getFixturePath('file.ini'))).toThrow();
+});
+test('gendiff shows help with -h option', () => {
+  expect(execSync('gendiff -h').toString()).toMatch(readFile('expected-help-text.txt'));
 });
