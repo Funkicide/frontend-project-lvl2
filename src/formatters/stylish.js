@@ -1,58 +1,58 @@
 import _ from 'lodash';
 
-export default (diff) => {
-  const iter = (currentValue, depth) => {
-    const replacer = ' ';
-    const spacesCount = 2;
-    const nestedDepth = depth + 2;
+const markers = {
+  added: '+ ',
+  deleted: '- ',
+  unchanged: '  ',
+};
 
-    const indentSize = depth * spacesCount;
-    const currentIndent = replacer.repeat(indentSize);
-    const bracketIndent = replacer.repeat(indentSize - spacesCount);
+const getIndent = (depth, spacesCount = 4) => {
+  const replacer = ' ';
+  const markerLength = 2;
+  return replacer.repeat((spacesCount * depth) - markerLength);
+};
 
-    const lines = currentValue.map((node) => {
-      const key = node.key ?? node[0];
-      const value = node.value ?? node[1];
+const getBracketIndent = (depth, spacesCount = 4) => {
+  const replacer = ' ';
+  return replacer.repeat((depth * spacesCount) - spacesCount);
+};
 
-      const {
-        status,
-        oldValue,
-        newValue,
-        children,
-      } = node;
+const stringify = (value, depth) => {
+  const iter = (currentValue, currentDepth) => {
+    if (!_.isPlainObject(currentValue)) {
+      return String(currentValue);
+    }
 
-      const markers = {
-        added: '+ ',
-        deleted: '- ',
-        unchanged: '  ',
-      };
+    const lines = Object.entries(currentValue)
+      .map(([key, val]) => `${getIndent(currentDepth)}${markers.unchanged}${key}: ${stringify(val, currentDepth + 1)}`);
 
-      const val = _.isObject(value)
-        ? iter(Object.entries(value), nestedDepth)
-        : value;
-      const oldVal = _.isObject(oldValue)
-        ? iter(Object.entries(oldValue), nestedDepth)
-        : oldValue;
-      const newVal = _.isObject(newValue)
-        ? iter(Object.entries(newValue), nestedDepth)
-        : newValue;
+    return ['{', ...lines, `${getBracketIndent(currentDepth)}}`].join('\n');
+  };
+  return iter(value, depth);
+};
 
-      switch (status) {
-        case 'added':
-          return `${currentIndent}${markers.added}${key}: ${val}`;
-        case 'deleted':
-          return `${currentIndent}${markers.deleted}${key}: ${val}`;
-        case 'changed':
-          return `${currentIndent}${markers.deleted}${key}: ${oldVal}\n${currentIndent}${markers.added}${key}: ${newVal}`;
-        case 'nested':
-          return `${currentIndent}${markers.unchanged}${key}: ${iter(children, nestedDepth)}`;
-        default:
-          return `${currentIndent}${markers.unchanged}${key}: ${val}`;
+export default (diffTree) => {
+  const iter = (nodes, depth) => {
+    const lines = nodes.map((node) => {
+      if (node.status === 'added') {
+        return `${getIndent(depth)}${markers.added}${node.key}: ${stringify(node.value, depth + 1)}`;
       }
+      if (node.status === 'deleted') {
+        return `${getIndent(depth)}${markers.deleted}${node.key}: ${stringify(node.value, depth + 1)}`;
+      }
+      if (node.status === 'changed') {
+        const oldValue = `${getIndent(depth)}${markers.deleted}${node.key}: ${stringify(node.oldValue, depth + 1)}`;
+        const newValue = `${getIndent(depth)}${markers.added}${node.key}: ${stringify(node.newValue, depth + 1)}`;
+        return `${oldValue}\n${newValue}`;
+      }
+      if (node.status === 'nested') {
+        return `${getIndent(depth)}${markers.unchanged}${node.key}: ${iter(node.children, depth + 1)}`;
+      }
+      return `${getIndent(depth)}${markers.unchanged}${node.key}: ${stringify(node.value, depth + 1)}`;
     });
 
-    return ['{', ...lines, `${bracketIndent}}`].join('\n');
+    return ['{', ...lines, `${getBracketIndent(depth)}}`].join('\n');
   };
 
-  return iter(diff, 1);
+  return iter(diffTree, 1);
 };
