@@ -8,30 +8,27 @@ const selectValueType = (value) => {
     return `'${value}'`;
   }
 
-  return `${value}`;
+  return String(value);
 };
 
-export default (diff) => {
-  const iter = (currentValue, ancestry) => {
-    const lines = currentValue.flatMap((node) => {
-      const {
-        key, status, value, oldValue, newValue, children,
-      } = node;
-      const currentPropertyName = [...ancestry, key].join('.');
+export default (diffTree) => {
+  const iter = (nodes, ancestry) => {
+    const lines = nodes.flatMap((node) => {
+      const currentPropertyName = [...ancestry, node.key].join('.');
 
-      const val = selectValueType(value);
-      const oldVal = selectValueType(oldValue);
-      const newVal = selectValueType(newValue);
+      const value = selectValueType(node.value);
+      const oldValue = selectValueType(node.oldValue);
+      const newValue = selectValueType(node.newValue);
 
-      switch (status) {
+      switch (node.status) {
         case 'added':
-          return `Property '${currentPropertyName}' was added with value: ${val}`;
+          return `Property '${currentPropertyName}' was added with value: ${value}`;
         case 'deleted':
           return `Property '${currentPropertyName}' was removed`;
         case 'changed':
-          return `Property '${currentPropertyName}' was updated. From ${oldVal} to ${newVal}`;
+          return `Property '${currentPropertyName}' was updated. From ${oldValue} to ${newValue}`;
         case 'nested':
-          return iter(children, [...ancestry, key]);
+          return iter(node.children, [...ancestry, node.key]);
         default:
           return [];
       }
@@ -40,5 +37,5 @@ export default (diff) => {
     return lines.join('\n');
   };
 
-  return iter(diff, []);
+  return iter(diffTree, []);
 };
