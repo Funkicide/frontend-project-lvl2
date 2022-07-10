@@ -7,6 +7,6 @@ const readFile = (filepath) => {
 
   return data;
 };
-const getFileExt = (filepath) => path.extname(filepath);
+const getDataFormat = (filepath) => path.extname(filepath).slice(1);
 
-export { readFile, getFileExt };
+export { readFile, getDataFormat };

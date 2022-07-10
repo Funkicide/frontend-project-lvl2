@@ -1,12 +1,12 @@
 import YAML from 'yaml';
 
-export default (data, fileExt) => {
-  if (fileExt === '' || fileExt === '.json') {
+export default (data, dataFormat) => {
+  if (dataFormat === '' || dataFormat === 'json') {
     return JSON.parse(data);
   }
-  if (fileExt === '.yml' || fileExt === '.yaml') {
+  if (dataFormat === 'yml' || dataFormat === 'yaml') {
     return YAML.parse(data);
   }
 
-  throw new Error(`Unknown file extension: '${fileExt}'!`);
+  throw new Error(`Unknown data format: '${dataFormat}'!`);
 };
