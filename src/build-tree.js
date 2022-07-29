@@ -1,35 +1,28 @@
 import _ from 'lodash';
 
-const buildTree = (currentData1, currentData2) => {
-  const keys1 = Object.keys(currentData1);
-  const keys2 = Object.keys(currentData2);
-
-  const uniqueKeys = _.union(keys1, keys2);
+const buildTree = (data1, data2) => {
+  const uniqueKeys = _.union(Object.keys(data1), Object.keys(data2));
   const sortedKeys = _.sortBy(uniqueKeys);
 
   const nodes = sortedKeys.map((key) => {
-    const currentValue1 = currentData1[key];
-    const currentValue2 = currentData2[key];
-
-    if (!_.has(currentData1, key)) {
-      return { key, status: 'added', value: currentValue2 };
+    if (!_.has(data1, key)) {
+      return { key, status: 'added', value: data2[key] };
     }
-    if (!_.has(currentData2, key)) {
-      return { key, status: 'deleted', value: currentValue1 };
+    if (!_.has(data2, key)) {
+      return { key, status: 'deleted', value: data1[key] };
     }
-    if (_.isPlainObject(currentValue1) && _.isPlainObject(currentValue2)) {
-      const children = buildTree(currentValue1, currentValue2);
+    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
       return {
-        key, status: 'nested', children,
+        key, status: 'nested', children: buildTree(data1[key], data2[key]),
       };
     }
-    if (!_.isEqual(currentValue1, currentValue2)) {
+    if (!_.isEqual(data1[key], data2[key])) {
       return {
-        key, status: 'changed', oldValue: currentValue1, newValue: currentValue2,
+        key, status: 'changed', oldValue: data1[key], newValue: data2[key],
       };
     }
 
-    return { key, status: 'unchanged', value: currentValue2 };
+    return { key, status: 'unchanged', value: data2[key] };
   });
 
   return nodes;
