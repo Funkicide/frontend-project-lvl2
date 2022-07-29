@@ -1,7 +1,7 @@
 import YAML from 'yaml';
 
 export default (data, dataFormat) => {
-  if (dataFormat === '' || dataFormat === 'json') {
+  if (dataFormat === 'json') {
     return JSON.parse(data);
   }
   if (dataFormat === 'yml' || dataFormat === 'yaml') {
